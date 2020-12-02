@@ -19,6 +19,12 @@ const io = require('socket.io')(http);
 io.on('connection', (socket) => {
     console.log('User connected.');
 
+    socket.on('message', (message) => {
+        console.log('User sent a message: ' + message);
+        
+        io.emit('message', message);
+    });
+
     socket.on('disconnect', () => {
         console.log('User disconnected.')
     });

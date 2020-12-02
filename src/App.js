@@ -10,6 +10,24 @@ const socket = io('http://127.0.0.1:8080', {
 function App() {
   console.log(process.env.NODE_ENV);
 
+  useEffect(() => {
+    socket.on('message', (text) => {
+        console.log("Got a new message...");
+        setRecentMessage(text)
+    });
+
+    return () => socket.disconnect();
+}, []);
+
+  // const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState('');
+  const [recentMessage, setRecentMessage] = useState('');
+
+  const sendMessage = () => {
+    console.log('Send a message!');
+    socket.emit('message', 'Hello there world!');
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -25,6 +43,11 @@ function App() {
         >
           Learn React
         </a>
+
+        <p>
+          {recentMessage !== '' ? recentMessage : 'There was no recent message!'}
+        </p>
+        <button onClick={sendMessage}>Click me to send the message!</button>
       </header>
     </div>
   );
