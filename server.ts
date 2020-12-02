@@ -11,6 +11,10 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
+app.get('/ping', function (req, res) {
+   res.send('pong');
+});
+
 http.listen(8080, () => {
     console.log('Listening on *:8080');
 });
