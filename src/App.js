@@ -1,7 +1,15 @@
+import { useState, useEffect } from 'react';
+import io from 'socket.io-client';
 import logo from './logo.svg';
 import './App.css';
 
+const socket = io('http://127.0.0.1:8080', {
+  transports: ['websocket']
+})
+
 function App() {
+  console.log(process.env.NODE_ENV);
+
   return (
     <div className="App">
       <header className="App-header">
