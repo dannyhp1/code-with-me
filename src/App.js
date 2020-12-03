@@ -3,10 +3,14 @@ import io from 'socket.io-client';
 import logo from './logo.svg';
 import './App.css';
 
-const server_url = 'http://code-with-me-phamdann.herokuapp.com';
-const local_url = 'http://127.0.0.1:8080';
+let serverUrl;
+if (process.env.NODE_ENV === 'production') {
+  serverUrl = 'http://code-with-me-phamdann.herokuapp.com';
+} else {
+  serverUrl = 'http://127.0.0.1:8080';
+}
 
-const socket = io(server_url, {
+const socket = io(serverUrl, {
   transports: ['websocket']
 })
 
@@ -22,8 +26,6 @@ function App() {
     return () => socket.disconnect();
 }, []);
 
-  // const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState('');
   const [recentMessage, setRecentMessage] = useState('');
 
   const sendMessage = () => {
