@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import AceEditor from 'react-ace';
-import io from 'socket.io-client';
 
 // Import css files from react-ace.
 import 'ace-builds/src-noconflict/mode-python';
