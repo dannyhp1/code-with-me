@@ -3,7 +3,10 @@ import io from 'socket.io-client';
 import logo from './logo.svg';
 import './App.css';
 
-const socket = io('http://127.0.0.1:8080', {
+const server_url = 'http://code-with-me-phamdann.herokuapp.com';
+const local_url = 'http://127.0.0.1:8080';
+
+const socket = io(server_url, {
   transports: ['websocket']
 })
 
