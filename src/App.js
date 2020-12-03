@@ -5,7 +5,7 @@ import './App.css';
 
 let serverUrl;
 if (process.env.NODE_ENV === 'production') {
-  serverUrl = 'http://code-with-me-phamdann.herokuapp.com';
+  serverUrl = 'https://code-with-me-phamdann.herokuapp.com';
 } else {
   serverUrl = 'http://127.0.0.1:8080';
 }
