@@ -15,8 +15,6 @@ const socket = io(serverUrl, {
 })
 
 function App() {
-  console.log(process.env.NODE_ENV);
-
   useEffect(() => {
     socket.on('message', (text) => {
         console.log("Got a new message...");
