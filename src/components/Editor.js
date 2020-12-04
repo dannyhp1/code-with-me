@@ -6,8 +6,6 @@ import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-dracula';
 
 function Editor(props) {
-    console.log(props);
-
     // Configuring editor for sizing.
     const [height, setHeight] = useState('60vh');
     const [width, setWidth] = useState('auto');
