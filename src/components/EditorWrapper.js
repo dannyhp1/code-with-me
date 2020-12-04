@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const socket = io(serverUrl, {
   transports: ['websocket']
-})
+});
 
 function EditorWrapper(props) {
     const [connected, setConnected] = useState(false);
@@ -20,6 +20,7 @@ function EditorWrapper(props) {
 
     useEffect(() => {
         socket.on('connected', () => {
+            console.log('Connected to the server\'s WebSocket.');
             setConnected(true);
         });
 
