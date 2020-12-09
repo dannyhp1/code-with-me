@@ -3,16 +3,23 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Editor from './Editor';
 
-let serverUrl;
+let serverUrl, socket;
+let options = {
+    transports: ['websocket'],
+};
+
 if (process.env.NODE_ENV === 'production') {
-  serverUrl = 'https://code-with-me-phamdann.herokuapp.com';
+  if (process.env.REACT_APP_USE_AWS === "true") {
+    serverUrl = 'https://aws.dannyhp.com';
+    options.path = '/code-with-me-socket';
+  } else {
+    serverUrl = 'https://code-with-me-phamdann.herokuapp.com';
+  }
 } else {
-  serverUrl = 'http://127.0.0.1:8080';
+  serverUrl = 'http://127.0.0.1:8181';
 }
 
-const socket = io(serverUrl, {
-  transports: ['websocket']
-});
+socket = io(serverUrl, options);
 
 function EditorWrapper(props) {
     const [connected, setConnected] = useState(false);
