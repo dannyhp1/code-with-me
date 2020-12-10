@@ -6,6 +6,8 @@ import Editor from './Editor';
 let serverUrl, socket;
 let options = {};
 
+console.log(process.env);
+
 if (process.env.NODE_ENV === 'production') {
   if (process.env.REACT_APP_USE_AWS === "true") {
     serverUrl = 'https://aws.dannyhp.com';
