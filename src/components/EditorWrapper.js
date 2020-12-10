@@ -4,9 +4,7 @@ import io from 'socket.io-client';
 import Editor from './Editor';
 
 let serverUrl, socket;
-let options = {
-    transports: ['websocket'],
-};
+let options = {};
 
 if (process.env.NODE_ENV === 'production') {
   if (process.env.REACT_APP_USE_AWS === "true") {
@@ -16,10 +14,10 @@ if (process.env.NODE_ENV === 'production') {
     serverUrl = 'https://code-with-me-phamdann.herokuapp.com';
   }
 } else {
-  serverUrl = 'http://127.0.0.1:8181';
+  serverUrl = 'http://127.0.0.1:8282';
 }
 
-socket = io(serverUrl, options);
+socket = io.connect(serverUrl);
 
 function EditorWrapper(props) {
     const [connected, setConnected] = useState(false);
@@ -31,9 +29,9 @@ function EditorWrapper(props) {
             setConnected(true);
         });
 
-        socket.on('code_change', (text) => {
+        socket.on('code_change', (data) => {
             console.log('Got a new code change...');
-            setCode(text);
+            setCode(data.code);
         });
 
         return () => socket.disconnect();
@@ -41,7 +39,7 @@ function EditorWrapper(props) {
 
     const transmitUpdatedCode = (message) => {
         console.log('Calling to transmit code...');
-        socket.emit('code_change', message);
+        socket.emit('code_change', { code: message });
     }
 
     const updateCode = (message) => {
