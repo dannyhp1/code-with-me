@@ -6,8 +6,6 @@ import Editor from './Editor';
 let serverUrl, socket;
 let options = {};
 
-console.log(process.env);
-
 if (process.env.NODE_ENV === 'production') {
   if (process.env.REACT_APP_USE_AWS === "true") {
     serverUrl = 'https://aws.dannyhp.com';
@@ -16,7 +14,7 @@ if (process.env.NODE_ENV === 'production') {
     serverUrl = 'https://code-with-me-phamdann.herokuapp.com';
   }
 } else {
-  serverUrl = 'http://127.0.0.1:8282';
+    serverUrl = 'http://127.0.0.1:8282';
 }
 
 socket = io.connect(serverUrl);
