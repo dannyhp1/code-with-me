@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
     serverUrl = 'http://127.0.0.1:8282';
 }
 
-socket = io.connect(serverUrl);
+socket = io.connect(serverUrl, options);
 
 function EditorWrapper(props) {
     const [connected, setConnected] = useState(false);
