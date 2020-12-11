@@ -79,9 +79,9 @@ function DualEditorWrapper(props) {
                 }
 
                 if (message.editorId === 1) {
-                    setFirstUserResults([...firstUserResults, result]);
+                    setFirstUserResults([result, ...firstUserResults]);
                 } else if (message.editorId === 2) {
-                    setSecondUserResults([...secondUserResults, result]);
+                    setSecondUserResults([result, ...secondUserResults]);
                 }
             }
         });
