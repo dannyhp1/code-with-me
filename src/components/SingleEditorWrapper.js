@@ -54,7 +54,7 @@ function SingleEditorWrapper(props) {
                 </Grid>
             </Grid>
             <Button variant='contained' color='primary' onClick={executeCode} disabled={executingCode}>
-                {executingCode ? 'Running code...' : 'Run Code'}
+                {executingCode ? process.env.REACT_APP_USE_AWS === 'true' ? 'Running code...' : 'Unavailable' : 'Run Code'}
             </Button>
         </div>
     )
