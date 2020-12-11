@@ -12,6 +12,8 @@ const disableCode = process.env.NODE_ENV === 'production' ? process.env.REACT_AP
 const borderRightStyle = { borderRight: '1px solid #a6d4fa' };
 const borderLeftStyle = { borderLeft: '1px solid #a6d4fa' };
 
+const errorMessage = 'Cannot connect to the code-with-me\'s server right now. Please try again later.';
+
 function SingleEditorWrapper(props) {
     const [executingCode, setExecutingCode] = useState(disableCode);
     const [code, setCode] = useState('');
@@ -22,7 +24,6 @@ function SingleEditorWrapper(props) {
     }, []);
 
     const executeCode = () => {
-        console.log(results);
         setExecutingCode(true);
 
         axios.post(executeUrl, { 'code': code })
@@ -37,7 +38,7 @@ function SingleEditorWrapper(props) {
                 }
                 setExecutingCode(false);
             }).catch(error => {
-                console.log('Failed to execute');
+                setResults([errorMessage, ...results]);
                 setExecutingCode(false);
             });
     }
@@ -52,7 +53,9 @@ function SingleEditorWrapper(props) {
                     <Results source={results.join('\n\n')} />
                 </Grid>
             </Grid>
-            <Button variant='contained' color='primary' onClick={executeCode} disabled={executingCode}>Run Code</Button>
+            <Button variant='contained' color='primary' onClick={executeCode} disabled={executingCode}>
+                {executingCode ? 'Running code...' : 'Run Code'}
+            </Button>
         </div>
     )
 
