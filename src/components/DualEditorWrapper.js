@@ -55,10 +55,11 @@ function DualEditorWrapper(props) {
 
         socket.on('user_connected', (message) => {
             setAmountConnectedUsers(message.total_users);
+            transmitFirstUserCode(firstUserCode);
+            transmitSecondUserCode(secondUserCode);
         });
 
         socket.on('code_change', (message) => {
-            console.log(message);
             if (message.editorId === 1) {
                 setFirstUserCode(message.code);
             } else if(message.editorId === 2) {
