@@ -6,27 +6,28 @@ import { Grid, Button } from '@material-ui/core';
 import Editor from './Editor';
 import Results from './Results';
 
-const executeUrl = process.env.NODE_ENV === 'production' ? Constants.PROD_EXECUTE_ENDPOINT : Constants.DEV_EXECUTE_ENDPOINT;
-
 const borderRightStyle = { borderRight: '1px solid #a6d4fa' };
 const borderLeftStyle = { borderLeft: '1px solid #a6d4fa' };
 
 const errorMessage = 'Cannot connect to the code-with-me\'s server right now. Please try again later.';
 
 // Setting socket settings.
-let socketUrl, socket;
+let executeUrl, socketUrl, socket;
 let socketOptions = Constants.SOCKET_OPTIONS;
 switch(process.env.NODE_ENV) {
     case 'production':
         if (process.env.REACT_APP_USE_AWS === 'true') {
             socketUrl = Constants.PROD_SOCKET_AWS_ENDPOINT;
             socketOptions.path = Constants.PROD_SOCKET_AWS_PATH;
+            executeUrl = Constants.PROD_EXECUTE_AWS_ENDPOINT;
         } else {
             socketUrl = Constants.PROD_SOCKET_HEROKU_ENDPOINT;
+            executeUrl = Constants.PROD_EXECUTE_HEROKU_ENDPOINT;
         }
         break;
     default:
         socketUrl = Constants.DEV_SOCKET_ENDPOINT;
+        executeUrl = Constants.DEV_EXECUTE_ENDPOINT;
 }
 
 function DualEditorWrapper(props) {

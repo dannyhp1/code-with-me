@@ -6,8 +6,18 @@ import { Grid, Button } from '@material-ui/core';
 import Editor from './Editor';
 import Results from './Results';
 
-const executeUrl = process.env.NODE_ENV === 'production' ? Constants.PROD_EXECUTE_ENDPOINT : Constants.DEV_EXECUTE_ENDPOINT;
-const disableCode = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_USE_AWS === 'false' : false;
+let executeUrl;
+switch(process.env.NODE_ENV) {
+    case 'production':
+        if (process.env.REACT_APP_USE_AWS === 'true') {
+            executeUrl = Constants.PROD_EXECUTE_AWS_ENDPOINT;
+        } else {
+            executeUrl = Constants.PROD_EXECUTE_HEROKU_ENDPOINT;
+        }
+        break;
+    default:
+        executeUrl = Constants.DEV_EXECUTE_ENDPOINT;
+}
 
 const borderRightStyle = { borderRight: '1px solid #a6d4fa' };
 const borderLeftStyle = { borderLeft: '1px solid #a6d4fa' };
@@ -15,7 +25,7 @@ const borderLeftStyle = { borderLeft: '1px solid #a6d4fa' };
 const errorMessage = 'Cannot connect to the code-with-me\'s server right now. Please try again later.';
 
 function SingleEditorWrapper(props) {
-    const [executingCode, setExecutingCode] = useState(disableCode);
+    const [executingCode, setExecutingCode] = useState(false);
     const [code, setCode] = useState('');
     const [results, setResults] = useState([]);
 
@@ -50,7 +60,7 @@ function SingleEditorWrapper(props) {
                 </Grid>
             </Grid>
             <Button variant='contained' color='primary' onClick={executeCode} disabled={executingCode}>
-                {executingCode ? process.env.REACT_APP_USE_AWS === 'true' ? 'Running code...' : 'Unavailable' : 'Run Code'}
+                {executingCode ? 'Running code...' : 'Run Code'}
             </Button>
         </div>
     )
