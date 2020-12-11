@@ -145,6 +145,7 @@ function DualEditorWrapper(props) {
             </Grid>
 
             <p>Connected: {connected ? 'true' : 'false'}</p>
+            <p>Using host: {process.env.REACT_APP_USE_AWS === 'false' ? 'Heroku' : 'AWS'} </p>
             <p>User: {userId} </p>
             <p>Amount of users connected: {amountConnectedUsers} </p>
         </div>
