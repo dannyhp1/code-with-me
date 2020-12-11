@@ -2,10 +2,10 @@ import { useState } from 'react';
 import AceEditor from 'react-ace';
 
 // Import css files from react-ace.
-import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/mode-text';
 import 'ace-builds/src-noconflict/theme-textmate';
 
-function Editor(props) {
+function Results(props) {
     // Configuring editor for sizing.
     const [height, setHeight] = useState('85vh');
     const [width, setWidth] = useState('auto');
@@ -17,25 +17,23 @@ function Editor(props) {
     // eslint-disable-next-line
     onResize = onResize.bind(this);
 
-    let onChange = (value) => {
-        props.onChange(value)
-    }
-
     return (
         <div>
             <AceEditor
                 name='editor'
-                mode='python'
+                mode='text'
                 theme='textmate'
                 height={height}
                 width={width}
                 value={props.source}
-                onChange={onChange}
+                showGutter={false}
+                readOnly={true}
+                highlightActiveLine={false}
                 editorProps={{ $blockScrolling: true }}
-                setOptions={{ showLineNumbers: true }}
+                setOptions={{ showLineNumbers: false }}
             />
         </div>
     )
 }
 
-export default Editor;
+export default Results;
