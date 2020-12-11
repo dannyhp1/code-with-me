@@ -54,14 +54,18 @@ function DualEditorWrapper(props) {
         });
 
         socket.on('user_connected', (message) => {
-            setAmountConnectedUsers(message.total_users);
+            if (message.roomId === parseInt(props.match.params.id)) {
+                setAmountConnectedUsers(message.total_users);
+            }
         });
 
         socket.on('code_change', (message) => {
-            if (message.editorId === 1) {
-                setFirstUserCode(message.code);
-            } else if(message.editorId === 2) {
-                setSecondUserCode(message.code);
+            if (message.roomId === parseInt(props.match.params.id)) {
+                if (message.editorId === 1) {
+                    setFirstUserCode(message.code);
+                } else if(message.editorId === 2) {
+                    setSecondUserCode(message.code);
+                }
             }
         });
 
