@@ -9,25 +9,20 @@ import Results from './Results';
 const borderRightStyle = { borderRight: '1px solid #a6d4fa' };
 const borderLeftStyle = { borderLeft: '1px solid #a6d4fa' };
 
-const errorMessage = 'Cannot connect to the code-with-me\'s server right now. Please try again later.';
-
 // Setting socket settings.
-let executeUrl, socketUrl, socket;
+let socketUrl, socket;
 let socketOptions = Constants.SOCKET_OPTIONS;
 switch(process.env.NODE_ENV) {
     case 'production':
         if (process.env.REACT_APP_USE_AWS === 'true') {
             socketUrl = Constants.PROD_SOCKET_AWS_ENDPOINT;
             socketOptions.path = Constants.PROD_SOCKET_AWS_PATH;
-            executeUrl = Constants.PROD_EXECUTE_AWS_ENDPOINT;
         } else {
             socketUrl = Constants.PROD_SOCKET_HEROKU_ENDPOINT;
-            executeUrl = Constants.PROD_EXECUTE_HEROKU_ENDPOINT;
         }
         break;
     default:
         socketUrl = Constants.DEV_SOCKET_ENDPOINT;
-        executeUrl = Constants.DEV_EXECUTE_ENDPOINT;
 }
 
 function DualEditorWrapper(props) {
@@ -35,6 +30,8 @@ function DualEditorWrapper(props) {
     const [amountConnectedUsers, setAmountConnectedUsers] = useState(0);
     const [firstUserCode, setFirstUserCode] = useState('');
     const [secondUserCode, setSecondUserCode] = useState('');
+    const [firstUserResults, setFirstUserResults] = useState([]);
+    const [secondUserResults, setSecondUserResults] = useState([]);
     const [userId, setUserId] = useState(0);
     const [roomId, setRoomId] = useState(0);
 
@@ -70,6 +67,25 @@ function DualEditorWrapper(props) {
             }
         });
 
+        socket.on('execute_code', (message) => {
+            if (message.roomId === parseInt(props.match.params.id)) {
+                let result;
+                switch(message.success) {
+                case false:
+                    result = message.error_message;
+                    break;
+                default:
+                    result = message.std_output === '' ? message.err_output : message.std_output;
+                }
+
+                if (message.editorId === 1) {
+                    setFirstUserResults([...firstUserResults, result]);
+                } else if (message.editorId === 2) {
+                    setSecondUserResults([...secondUserResults, result]);
+                }
+            }
+        });
+
         return () => socket.disconnect();
     }, []);
 
@@ -91,7 +107,15 @@ function DualEditorWrapper(props) {
     const updateSecondUserCode = (message) => {
         setSecondUserCode(message);
         transmitSecondUserCode(message);
-    }
+    };
+
+    const executeFirstUserCode = () => {
+        socket.emit('execute_code', { roomId: roomId, userId: userId, editorId: 1, code: firstUserCode });
+    };
+
+    const executeSecondUserCode = () => {
+        socket.emit('execute_code', { roomId: roomId, userId: userId, editorId: 2, code: secondUserCode });
+    };
 
     return (
         <div>
@@ -101,6 +125,22 @@ function DualEditorWrapper(props) {
                 </Grid>
                 <Grid item xs={6} style={borderLeftStyle}>
                     <Editor source={secondUserCode} onChange={(message) => updateSecondUserCode(message)} height={'50vh'} />
+                </Grid>
+                <Grid item xs={6} style={borderRightStyle}>
+                    <Results source={firstUserResults.join('\n\n')} height={'25vh'} />
+                </Grid>
+                <Grid item xs={6} style={borderLeftStyle}>
+                    <Results source={secondUserResults.join('\n\n')} height={'25vh'} />
+                </Grid>
+                <Grid item xs={6}>
+                    <Button variant='contained' color='primary' onClick={executeFirstUserCode}>
+                        Run User 1's Code
+                    </Button>
+                </Grid>
+                <Grid item xs={6}>
+                    <Button variant='contained' color='primary' onClick={executeSecondUserCode}>
+                        Run User 2's Code
+                    </Button>
                 </Grid>
             </Grid>
 
