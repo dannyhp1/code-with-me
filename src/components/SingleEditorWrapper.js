@@ -19,10 +19,6 @@ function SingleEditorWrapper(props) {
     const [code, setCode] = useState('');
     const [results, setResults] = useState([]);
 
-    useEffect(() => {
-
-    }, []);
-
     const executeCode = () => {
         setExecutingCode(true);
 
@@ -47,10 +43,10 @@ function SingleEditorWrapper(props) {
         <div>
             <Grid container>
                 <Grid item xs={6} style={borderRightStyle}>
-                    <Editor source={code} onChange={(message) => setCode(message)} />
+                    <Editor source={code} onChange={(message) => setCode(message)} height={'85vh'} />
                 </Grid>
                 <Grid item xs={6} style={borderLeftStyle}>
-                    <Results source={results.join('\n\n')} />
+                    <Results source={results.join('\n\n')} height={'85vh'} />
                 </Grid>
             </Grid>
             <Button variant='contained' color='primary' onClick={executeCode} disabled={executingCode}>

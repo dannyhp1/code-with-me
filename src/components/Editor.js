@@ -7,7 +7,7 @@ import 'ace-builds/src-noconflict/theme-textmate';
 
 function Editor(props) {
     // Configuring editor for sizing.
-    const [height, setHeight] = useState('85vh');
+    const [height, setHeight] = useState(props.height);
     const [width, setWidth] = useState('auto');
     let onResize = (width, height) => {
         setHeight(height);
