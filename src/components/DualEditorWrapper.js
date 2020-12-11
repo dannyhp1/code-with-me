@@ -1,31 +1,32 @@
 
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import * as Constants from '../constants/config';
 import Editor from './Editor';
 
-let serverUrl, socket;
-let options = {
-    transports: ['websocket'],
-};
+let socketUrl, socket;
+let socketOptions = Constants.SOCKET_OPTIONS;
 
-if (process.env.NODE_ENV === 'production') {
-  if (process.env.REACT_APP_USE_AWS === "true") {
-    serverUrl = 'https://aws.dannyhp.com';
-    options.path = '/code-with-me-socket';
-  } else {
-    serverUrl = 'https://code-with-me-phamdann.herokuapp.com';
-  }
-} else {
-  serverUrl = 'http://127.0.0.1:8181';
+switch(process.env.NODE_ENV) {
+    case 'production':
+        if (process.env.REACT_APP_USE_AWS === 'true') {
+            socketUrl = Constants.PROD_SOCKET_AWS_ENDPOINT;
+            socketOptions.path = Constants.PROD_SOCKET_AWS_PATH;
+        } else {
+            socketUrl = Constants.PROD_SOCKET_HEROKU_ENDPOINT;
+        }
+        break;
+    default:
+        socketUrl = Constants.DEV_SOCKET_ENDPOINT;
 }
 
-socket = io(serverUrl, options);
-
-function EditorWrapper(props) {
+function DualEditorWrapper(props) {
     const [connected, setConnected] = useState(false);
-    const [code, setCode] = useState('testing');
+    const [code, setCode] = useState('');
 
     useEffect(() => {
+        socket = io(socketUrl, socketOptions);
+
         socket.on('connected', () => {
             console.log('Connected to the server\'s WebSocket.');
             setConnected(true);
@@ -51,6 +52,7 @@ function EditorWrapper(props) {
 
     return (
         <div>
+            <p>Dual Editor Wrapper!</p>
             <p>Connected: {connected ? 'true' : 'false'}</p>
             <Editor source={code} onChange={(message) => updateCode(message)} />
         </div>
@@ -58,4 +60,4 @@ function EditorWrapper(props) {
 
 }
 
-export default EditorWrapper;
+export default DualEditorWrapper;
