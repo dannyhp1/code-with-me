@@ -11,5 +11,5 @@ export const SOCKET_OPTIONS = { transports: ['websocket'] };
 
 // Endpoints for execution.
 export const DEV_EXECUTE_ENDPOINT = 'http://localhost:8181/execute';
-export const PROD_EXECUTE_HEROKU_ENDPOINT = 'https://code-with-me-phamdann.herokuapp.com/execute';
+export const PROD_EXECUTE_HEROKU_ENDPOINT = 'https://code-with-me-executor-phamdann.herokuapp.com/v1/execute';
 export const PROD_EXECUTE_AWS_ENDPOINT = 'https://aws.dannyhp.com/code-with-me/execute';
